@@ -6,8 +6,7 @@ qkstats: src/main.c src/stdio.h makefile
 
 test: qkstats
 	@cat qkstats | wc
-	@echo Hello, World! | ./qkstats
-	@echo Longer Hello, World! | ./qkstats
+	@./qkstats
 
 clean:
 	rm qkstats

@@ -33,6 +33,12 @@ ssize_t syscall(size_t sysno, ...) {
 #define write(fd,buf,len) syscall(1,fd,(size_t)buf,len)
 #define exit(error_code) syscall(60,error_code)
 
+typedef ssize_t FILE;
+#define O_RDONLY 00
+#define O_WRONLY 01
+#define O_RDWR   02
+#define open(filename,flags) (FILE*)syscall(2,(size_t)filename,flags)
+
 // Bootstrap our main function
 void _start() {
   exit(main());
