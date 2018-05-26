@@ -37,6 +37,24 @@ typedef ssize_t FILE;
 #define close(fd) syscall(3,fd)
 #define exit(error_code) syscall(60,error_code)
 
+// stdlib.h
+
+long int strtol(const char *nptr, const char* endptr, int base) {
+  // https://codereview.stackexchange.com/a/45769
+  long int value = 0;
+  int sign = 1;
+  if( *nptr == '+' || *nptr == '-' ) {
+    if( *nptr  == '-' ) sign = -1;
+    nptr++;
+  }
+  while (nptr <= endptr) {
+    value *= base;
+    value += (int) (*nptr-'0');
+    nptr++;
+  }
+  return (value * sign);
+}
+
 // Bootstrap our main function
 int main();
 void _start() {
