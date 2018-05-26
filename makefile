@@ -7,6 +7,7 @@ qkstats: src/main.c src/stdio.h src/bootstrap.h
 test: qkstats
 	@cat qkstats | wc
 	@echo Hello, World! | ./qkstats
+	@echo Longer Hello, World! | ./qkstats
 
 clean:
 	rm qkstats

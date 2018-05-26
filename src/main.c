@@ -1,10 +1,10 @@
 #include "stdio.h"
 
 int main() {
-  char buf[14];
+  char buf[1024];
 
-  read(stdin, buf, 14);
-  write(stdout, buf, 14);
+  size_t len = read(stdin, buf, 1024);
+  write(stdout, buf, len);
 }
 
 #include "bootstrap.h"
