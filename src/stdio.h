@@ -1,3 +1,7 @@
+#define stdio (void*)0
+#define stdout (void*)1
+#define stderr (void*)2
+
 void write(void* fd, char* buf, long len) {
   asm ("mov $1,%%rax;" // Write is syscall 1
        "mov $1,%%rdi;" // stdout is file descriptor 1
