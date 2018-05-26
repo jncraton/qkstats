@@ -33,10 +33,10 @@ typedef ssize_t FILE;
 #define O_RDONLY 00
 #define O_WRONLY 01
 #define O_RDWR   02
-#define read(fd,buf,len) syscall(0,fd,(size_t)buf,len)
-#define write(fd,buf,len) syscall(1,fd,(size_t)buf,len)
-#define open(filename,flags) (FILE*)syscall(2,(size_t)filename,flags)
-#define close(fd) syscall(3,(size_t)fd)
+#define read(fd,buf,len) syscall(0,fd,buf,len)
+#define write(fd,buf,len) syscall(1,fd,buf,len)
+#define open(filename,flags) (FILE*)syscall(2,filename,flags)
+#define close(fd) syscall(3,fd)
 #define exit(error_code) syscall(60,error_code)
 
 // Bootstrap our main function
