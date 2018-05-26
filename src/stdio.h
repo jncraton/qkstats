@@ -6,33 +6,24 @@
 #define stdout 1
 #define stderr 2
 
-ssize_t syscall3(size_t sysno, size_t a, size_t b, size_t c) {
-  /*
-  size_t* arg = &sysno;
-
-  size_t args[5];
-  for (int i = 0; i < 5; i++) {
-    arg++;
-    args[i] = *arg;
-  }
-  */
+ssize_t syscall(size_t sysno, ...) {
+  // The x86_64 calling convention uses rdi, rsi, rdx, rcx, r8 and r9 as args
+  // The kernel interface uses rdi, rsi, rdx, r10, r8 and r9 for arg and rax for sysno
   
-  // implements a 3 parameter system call
-  // https://filippo.io/linux-syscall-table/
-  asm ("mov %0,%%rax;" // System call number
-       "mov %1,%%rdi;" // arg1
-       "mov %2,%%rsi;" // arg2
-       "mov %3,%%rdx;" // arg3
-       "mov %%r8,%%r10;"
-       "mov %%r9,%%r8;"
+  asm ("mov %%rdi,%%rax;" // System call number (sysno)
+       "mov %%rsi,%%rdi;" // first syscall arg and va_arg
+       "mov %%rdx,%%rsi;" // second syscall arg and va_arg
+       "mov %%rcx,%%rdx;" // third syscall arg and va_arg
+       "mov %%r8,%%r10;"  // fourth syscall arg and va_arg
+       "mov %%r9,%%r8;"   // fifth syscall arg and va_arg
        "syscall;"
        :
-       :"r"(sysno),"r"(a),"r"(b),"r"(c)
-       :"rax","rdi","rsi","rdx","r8","r9","r10","rcx","r11"); /* clobbered registers */
+       :
+       :"rax","rdi","rsi","rdx","r8","r9","r10","rcx","r11"); // clobbered registers
 
-  register int ret asm("rax");
+  register ssize_t ret asm("rax");
   return ret;
 }
 
-#define read(fd,buf,len) syscall3(0,fd,(size_t)buf,len)
-#define write(fd,buf,len) syscall3(1,fd,(size_t)buf,len)
+#define read(fd,buf,len) syscall(0,fd,(size_t)buf,len)
+#define write(fd,buf,len) syscall(1,fd,(size_t)buf,len)
