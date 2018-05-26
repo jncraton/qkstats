@@ -1,11 +1,10 @@
-// This should be in stddef.h...
+int main();
+
+// stddef.h
 #define size_t long
 #define ssize_t signed long
 
-#define stdin 0
-#define stdout 1
-#define stderr 2
-
+// unistd.h
 ssize_t syscall(size_t sysno, ...) {
   // The x86_64 calling convention uses rdi, rsi, rdx, rcx, r8 and r9 as args
   // The kernel interface uses rdi, rsi, rdx, r10, r8 and r9 for arg and rax for sysno
@@ -25,5 +24,16 @@ ssize_t syscall(size_t sysno, ...) {
   return ret;
 }
 
+// stdio.h
+#define stdin 0
+#define stdout 1
+#define stderr 2
+
 #define read(fd,buf,len) syscall(0,fd,(size_t)buf,len)
 #define write(fd,buf,len) syscall(1,fd,(size_t)buf,len)
+#define exit(error_code) syscall(60,error_code)
+
+// Bootstrap our main function
+void _start() {
+  exit(main());
+}

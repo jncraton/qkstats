@@ -6,5 +6,3 @@ int main() {
   size_t len = read(stdin, buf, 1024);
   write(stdout, buf, len);
 }
-
-#include "bootstrap.h"
