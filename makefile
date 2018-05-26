@@ -6,7 +6,7 @@ qkstats: src/main.c src/stdio.h src/bootstrap.h
 	cat qkstats | wc
 
 test: qkstats
-	./qkstats
+	echo Hello, World! | ./qkstats
 
 clean:
 	rm qkstats

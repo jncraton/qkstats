@@ -1,7 +1,10 @@
 #include "stdio.h"
 
 int main() {
-  write(stdout, "Hello, World!\n", 14);
+  char buf[14];
+
+  read(stdin, buf, 14);
+  write(stdout, buf, 14);
 }
 
 #include "bootstrap.h"
