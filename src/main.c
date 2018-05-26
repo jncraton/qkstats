@@ -1,4 +1,4 @@
-#include "stdio.h"
+#include "ulibc.h"
 
 int main() {
   char buf[65535];
