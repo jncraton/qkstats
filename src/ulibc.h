@@ -1,5 +1,3 @@
-int main();
-
 // stddef.h
 #define size_t long
 #define ssize_t signed long
@@ -40,6 +38,7 @@ typedef ssize_t FILE;
 #define exit(error_code) syscall(60,error_code)
 
 // Bootstrap our main function
+int main();
 void _start() {
   exit(main());
 }
