@@ -1,4 +1,4 @@
-#define stdio (void*)0
+#define stdin (void*)0
 #define stdout (void*)1
 #define stderr (void*)2
 
