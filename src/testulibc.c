@@ -17,6 +17,10 @@ int main() {
   assert(*strtok(0x00, ", ") == 'c');
 
   assert(atol("1") == 1);
+  assert(atol("10") == 10);
+  assert(atol("38592") == 38592);
+  assert(atol("1285012080123") == 1285012080123);
+  assert(atol("-7245234512") == -7245234512);
 
   write(stdout,"All tests passed.\n",18);
 }
