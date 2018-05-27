@@ -70,9 +70,11 @@ int sprintf(char * str, const char* format, ...) {
       } else if (*format == 'd') {
         size_t arg;
         asm("mov %%rdx,%0" : "=r"(arg));
+        char in_leading_zeroes = 1;
         for (size_t i=1e18; i>0; i=i/10) {
           int digit = arg / i;
-          if (digit > 0) {
+          if (digit > 0 || (digit==0 && !in_leading_zeroes)) {
+            in_leading_zeroes = 0;
             arg -= digit * i;
             *str = '0' + digit; str++;
           }
