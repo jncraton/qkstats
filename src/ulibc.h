@@ -67,6 +67,10 @@ Variadic function support
 This isn't quite right. This isn't as simple as incrementing
 a pointer on the stack in x86_64. If you need to use this,
 read the source carefully for the implementation details.
+
+This currently only supports a maximum of six total arguments.
+
+https://blog.nelhage.com/2010/10/amd64-and-va_arg/
 */
 
 typedef struct {
@@ -82,14 +86,12 @@ typedef struct {
   register size_t arg4 asm ("rcx");\
   register size_t arg5 asm ("r8");\
   register size_t arg6 asm ("r9");\
-  vl = (va_list){&start,1};\
-  if ((size_t)arg1 == (size_t)start) {  }\
-  else if ((size_t)arg2 == (size_t)start) { vl.count++; }\
-  else if ((size_t)arg3 == (size_t)start) { vl.count+=2; }\
-  else if ((size_t)arg4 == (size_t)start) { vl.count+=3; }\
-  else if ((size_t)arg5 == (size_t)start) { vl.count+=4; }\
-  else if ((size_t)arg6 == (size_t)start) { vl.count+=5; }\
-  else vl.count = 6;\
+  vl = (va_list){0,1};\
+  if ((size_t)arg2 == (size_t)start) { vl.count++; }\
+  if ((size_t)arg3 == (size_t)start) { vl.count+=2; }\
+  if ((size_t)arg4 == (size_t)start) { vl.count+=3; }\
+  if ((size_t)arg5 == (size_t)start) { vl.count+=4; }\
+  if ((size_t)arg6 == (size_t)start) { vl.count+=5; }\
   vl.register_args[0] = arg1;\
   vl.register_args[1] = arg2;\
   vl.register_args[2] = arg3;\

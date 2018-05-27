@@ -3,7 +3,7 @@
 int main() {
   char buf[65535];
 
-  sprintf(buf, "Some numbers: %d %d %d %d %d %d %d %d\n", 42, 100, 200, 675, 1, 2, 3, 500);
+  sprintf(buf, "Some numbers: %d %d %d %d\n", 42, 100, 200, 675);
   write(stdout, buf, strlen(buf));
 
   FILE* fp = open("/sys/block/sda/stat",O_RDONLY);
