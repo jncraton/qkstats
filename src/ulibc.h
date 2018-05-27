@@ -23,9 +23,9 @@ ssize_t syscall(size_t sysno, ...) {
 }
 
 // stdio.h
-#define stdin 0
-#define stdout 1
-#define stderr 2
+#define stdin (FILE*)0
+#define stdout (FILE*)1
+#define stderr (FILE*)2
 
 typedef ssize_t FILE;
 #define O_RDONLY 00
@@ -38,6 +38,12 @@ typedef ssize_t FILE;
 #define exit(error_code) syscall(60,error_code)
 
 // stdlib.h
+
+size_t strlen(const char* str) {
+  int i = 0;
+  while(str[i] != 0x00) { i++; }
+  return i;
+}
 
 long int strtol(const char *nptr, const char* endptr, int base) {
   // https://codereview.stackexchange.com/a/45769
@@ -53,6 +59,71 @@ long int strtol(const char *nptr, const char* endptr, int base) {
     nptr++;
   }
   return (value * sign);
+}
+
+/*
+Variadic function support
+
+This isn't quite right. This isn't as simple as incrementing
+a pointer on the stack in x86_64. If you need to use this,
+read the source carefully for the implementation details.
+*/
+
+typedef struct {
+  void* start;
+  unsigned int count;
+  size_t register_args[4];
+} va_list;
+
+inline void __attribute__((always_inline)) va_start(va_list* vl, void* start) {
+  *vl = (va_list){start, 0};
+
+  asm("mov %%rdx,%0" : "=r"(vl->register_args[0]));
+  asm("mov %%rcx,%0" : "=r"(vl->register_args[1]));
+  asm("mov %%r8,%0" : "=r"(vl->register_args[2]));
+  asm("mov %%r9,%0" : "=r"(vl->register_args[3]));
+}
+
+inline size_t __attribute__((always_inline)) _va_arg(va_list* vl) {
+  size_t ret;
+  if (vl->count < 4) {
+    ret = vl->register_args[vl->count];
+  } else {
+    ret = 0; //TODO: handle stack args
+  }
+
+  vl->count++;
+
+  return ret;
+}
+#define va_arg(vl, type) _va_arg(vl)
+
+int sprintf(char * str, const char* format, ...) {
+  va_list vl = {&format,0};
+  va_start(&vl, &format);
+  
+  while (*format != 0x00) {
+    if (*format == '%') {
+      format++;
+      if (*format == '%') {
+        *str = '%'; str++;
+      } else if (*format == 'd') {
+        size_t arg = va_arg(&vl,size_t);      
+        for (size_t i=1e18; i>0; i=i/10) {
+          int digit = arg / i;
+          if (digit > 0) {
+            arg -= digit * i;
+            *str = '0' + digit; str++;
+          }
+        }
+      }
+      format++;      
+    } else {
+      *str = *format; 
+      str++; format++;
+    }
+  }
+  return 0;
 }
 
 // Bootstrap our main function
