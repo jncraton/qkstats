@@ -78,13 +78,15 @@ char* strtok(char* str, const char* delim) {
 
 long int atol(const char *str) {
   // https://codereview.stackexchange.com/a/45769
+  while (*str && (*str==' ' || *str=='\t')) { str++; }
+  
   long int value = 0;
   int sign = 1;
   if( *str == '+' || *str == '-' ) {
     if( *str  == '-' ) sign = -1;
     str++;
   }
-  while (*str) {
+  while (*str && *str>='0' && *str<='9') {
     value *= 10;
     value += (int) (*str-'0');
     str++;

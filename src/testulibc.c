@@ -21,6 +21,8 @@ int main() {
   assert(atol("38592") == 38592);
   assert(atol("1285012080123") == 1285012080123);
   assert(atol("-7245234512") == -7245234512);
+  assert(atol(" 20") == 20);
+  assert(atol(" 55 ") == 55);
 
   write(stdout,"All tests passed.\n",18);
 }
