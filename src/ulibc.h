@@ -49,6 +49,7 @@ char* strchr(const char *s, int c) {
   // Returns a pointer to the first occurrence of c in s
   // Returns null if c is not in s
   while(*s != 0x00 && (int)(*s) != c) { s++; }
+  if (*s == 0x00) { return (char*)0x00; }
   return (char*)s;
 }
 
@@ -62,7 +63,7 @@ char* strtok(char* str, const char* delim) {
   // not done && the position of the current char in the delimiter isn't null
   while(*str && !strchr(delim,*str)) { str++; }
   char* start = str;
-
+  
   // Skip non-delimiters
   while(*str && strchr(delim,*str)) { str++; }
   if (*str) {
