@@ -4,19 +4,24 @@ STRIPFLAGS=-S --strip-unneeded --remove-section=.note.gnu.gold-version --remove-
 
 all: qkstats
 
-qkstats: src/main.c src/ulibc.h makefile
+qkstats: src/main.c src/ulibc.h
 	$(CC) $(CCFLAGS) -o qkstats src/main.c 
 	strip $(STRIPFLAGS) qkstats
 
 testulibc: src/testulibc.c src/ulibc.h
 	$(CC) $(CCFLAGS) -o testulibc src/testulibc.c
 	strip $(STRIPFLAGS) testulibc
-
-test: testulibc qkstats
-	@cat qkstats | wc
 	./testulibc
+
+testulibc-passed: testulibc
+	./testulibc
+	touch testulibc-passed
+
+test: testulibc-passed qkstats
+	@cat qkstats | wc
 	./qkstats
 
 clean:
-	rm qkstats
-	rm testulibc
+	rm -f qkstats
+	rm -f testulibc
+	rm -f testulibc-passed
