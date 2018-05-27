@@ -11,7 +11,6 @@ qkstats: src/main.c src/ulibc.h
 testulibc: src/testulibc.c src/ulibc.h
 	$(CC) $(CCFLAGS) -o testulibc src/testulibc.c
 	strip $(STRIPFLAGS) testulibc
-	./testulibc
 
 testulibc-passed: testulibc
 	./testulibc
