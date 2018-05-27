@@ -49,4 +49,4 @@ matrix:
 before_install:
     - eval "${MATRIX_EVAL}"
 
-script: make CC='$CC' test
+script: make CC=$CC test
