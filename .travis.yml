@@ -12,36 +12,6 @@ matrix:
       env:
          - MATRIX_EVAL="CC=gcc-5"
 
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-6
-      env:
-        - MATRIX_EVAL="CC=gcc-6"
-
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-7
-      env:
-        - MATRIX_EVAL="CC=gcc-7"
-
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-8
-      env:
-        - MATRIX_EVAL="CC=gcc-8"
-
 before_install:
     - eval "${MATRIX_EVAL}"
 
