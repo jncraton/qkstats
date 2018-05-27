@@ -14,8 +14,8 @@ testulibc: src/testulibc.c src/ulibc.h
 
 test: testulibc qkstats
 	@cat qkstats | wc
-	@./testulibc
-	@./qkstats
+	./testulibc
+	./qkstats
 
 clean:
 	rm qkstats
