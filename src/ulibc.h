@@ -97,7 +97,9 @@ typedef struct {
   vl.register_args[4] = arg5;\
   vl.register_args[5] = arg6;
 
-#define va_arg(v1,type) ((vl.count < 6) ? vl.register_args[vl.count] : 0); vl.count++
+#define va_arg(v1,type) ((vl.count < 6) ? vl.register_args[vl.count] : *((type *)vl.start));\
+  vl.count++;\
+  if (vl.count >= 6) { vl.start++;  };
 
 int sprintf(char * str, const char* format, ...) {
   va_list vl;
