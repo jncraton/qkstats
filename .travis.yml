@@ -10,7 +10,7 @@ matrix:
           packages:
             - gcc-5
       env:
-         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+         - MATRIX_EVAL="CC=gcc-5"
 
     - os: linux
       addons:
@@ -20,7 +20,7 @@ matrix:
           packages:
             - gcc-6
       env:
-        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+        - MATRIX_EVAL="CC=gcc-6"
 
     - os: linux
       addons:
@@ -30,7 +30,7 @@ matrix:
           packages:
             - gcc-7
       env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+        - MATRIX_EVAL="CC=gcc-7"
 
     - os: linux
       addons:
