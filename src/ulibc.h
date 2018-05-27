@@ -61,14 +61,14 @@ char* strtok(char* str, const char* delim) {
 
   // Skip delimiters
   // not done && the position of the current char in the delimiter isn't null
-  while(*str && !strchr(delim,*str)) { str++; }
+  while(*str && strchr(delim,*str)) { str++; }
   char* start = str;
   
   // Skip non-delimiters
-  while(*str && strchr(delim,*str)) { str++; }
+  while(*str && !strchr(delim,*str)) { str++; }
   if (*str) {
-    *(str+1) = 0x00;
-    next = str+2;
+    *(str) = 0x00;
+    next = str+1;
   } else {
     next = 0x00;
   }

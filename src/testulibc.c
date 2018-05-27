@@ -10,15 +10,11 @@ int main() {
   assert(strchr("ab",'b')==(char*)&("ab")+1);
   assert(strchr("aaaba",'b')==(char*)&("aaaba")+3);
 
-  //assert(*strtok("a b c", " ") == 'a');
-  //assert(*strtok("  a b c", " ") == 'a');
-/*
-  char* tok = strtok("a b c", " ");
-  assert(tok[0] == 'a');
-  assert(tok[1] == 0x00);
-  
-  assert(strtok(0x00, " ") != 0x00);
-  //assert(*strtok(0x00, " ") == 'c');
-*/
+  char buf[16] = "   a b, c";
+
+  assert(*strtok(buf, " ") == 'a');
+  assert(*strtok(0x00, " ") == 'b');
+  assert(*strtok(0x00, ", ") == 'c');
+
   write(stdout,"All tests passed.\n",18);
 }
