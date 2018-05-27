@@ -78,7 +78,7 @@ char* strtok(char* str, const char* delim) {
 
 long int atol(const char *str) {
   // https://codereview.stackexchange.com/a/45769
-  while (*str && (*str==' ' || *str=='\t')) { str++; }
+  while (*str==' ' || *str=='\t') { str++; }
   
   long int value = 0;
   int sign = 1;
