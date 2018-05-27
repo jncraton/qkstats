@@ -72,35 +72,36 @@ read the source carefully for the implementation details.
 typedef struct {
   void* start;
   unsigned int count;
-  size_t register_args[4];
+  size_t register_args[6];
 } va_list;
 
-inline void __attribute__((always_inline)) va_start(va_list* vl, void* start) {
-  *vl = (va_list){start, 0};
+#define va_start(vl,start) \
+  register size_t arg1 asm ("rdi");\
+  register size_t arg2 asm ("rsi");\
+  register size_t arg3 asm ("rdx");\
+  register size_t arg4 asm ("rcx");\
+  register size_t arg5 asm ("r8");\
+  register size_t arg6 asm ("r9");\
+  vl = (va_list){&start,1};\
+  if ((size_t)arg1 == (size_t)start) {  }\
+  else if ((size_t)arg2 == (size_t)start) { vl.count++; }\
+  else if ((size_t)arg3 == (size_t)start) { vl.count+=2; }\
+  else if ((size_t)arg4 == (size_t)start) { vl.count+=3; }\
+  else if ((size_t)arg5 == (size_t)start) { vl.count+=4; }\
+  else if ((size_t)arg6 == (size_t)start) { vl.count+=5; }\
+  else vl.count = 6;\
+  vl.register_args[0] = arg1;\
+  vl.register_args[1] = arg2;\
+  vl.register_args[2] = arg3;\
+  vl.register_args[3] = arg4;\
+  vl.register_args[4] = arg5;\
+  vl.register_args[5] = arg6;
 
-  asm("mov %%rdx,%0" : "=r"(vl->register_args[0]));
-  asm("mov %%rcx,%0" : "=r"(vl->register_args[1]));
-  asm("mov %%r8,%0" : "=r"(vl->register_args[2]));
-  asm("mov %%r9,%0" : "=r"(vl->register_args[3]));
-}
-
-inline size_t __attribute__((always_inline)) _va_arg(va_list* vl) {
-  size_t ret;
-  if (vl->count < 4) {
-    ret = vl->register_args[vl->count];
-  } else {
-    ret = 0; //TODO: handle stack args
-  }
-
-  vl->count++;
-
-  return ret;
-}
-#define va_arg(vl, type) _va_arg(vl)
+#define va_arg(v1,type) ((vl.count < 6) ? vl.register_args[vl.count] : 0); vl.count++
 
 int sprintf(char * str, const char* format, ...) {
-  va_list vl = {&format,0};
-  va_start(&vl, &format);
+  va_list vl;
+  va_start(vl,format);
   
   while (*format != 0x00) {
     if (*format == '%') {
@@ -108,7 +109,7 @@ int sprintf(char * str, const char* format, ...) {
       if (*format == '%') {
         *str = '%'; str++;
       } else if (*format == 'd') {
-        size_t arg = va_arg(&vl,size_t);      
+        size_t arg = va_arg(vl,size_t);      
         char in_leading_zeroes = 1;
         for (size_t i=1e18; i>0; i=i/10) {
           int digit = arg / i;
@@ -118,6 +119,7 @@ int sprintf(char * str, const char* format, ...) {
             *str = '0' + digit; str++;
           }
         }
+        if (in_leading_zeroes) { *str = '0'; str++; }
       }
       format++;      
     } else {
