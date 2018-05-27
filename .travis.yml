@@ -1,2 +1,11 @@
 language: c
+os: linux
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-5
+env:
+   - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
 script: make test
