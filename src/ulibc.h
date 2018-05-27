@@ -45,6 +45,35 @@ size_t strlen(const char* str) {
   return i;
 }
 
+char* strchr(const char *s, int c) {
+  // Returns a pointer to the first occurrence of c in s
+  // Returns null if c is not in s
+  while(*s != 0x00 && (int)(*s) != c) { s++; }
+  return (char*)s;
+}
+
+char* strtok(char* str, const char* delim) {
+  static char* next = 0x00;
+
+  if (!str) { str = next; }
+  if (str == 0x00) { return 0x00; }
+
+  // Skip delimiters
+  while(*str && strchr(delim,*str)) { str++; }
+  char* start = str;
+
+  // Skip non-delimiters
+  while(*str && !strchr(delim,*str)) { str++; }
+  if (*str) {
+    *str = 0x00;
+    next = str+1;
+  } else {
+    next = 0x00;
+  }
+  
+  return start;
+}
+
 long int strtol(const char *nptr, const char* endptr, int base) {
   // https://codereview.stackexchange.com/a/45769
   long int value = 0;
@@ -133,6 +162,8 @@ int sprintf(char * str, const char* format, ...) {
   }
   return 0;
 }
+
+#define assert(expr) if (!(expr)) { write(stderr,"ASSERTION FAILED: " #expr "\n",strlen(#expr) + 19); exit(1); }
 
 // Bootstrap our main function
 int main();

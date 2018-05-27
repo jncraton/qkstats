@@ -7,12 +7,11 @@ int main() {
   read(fp, buf, 65535);
   close(fp);
 
-  int start = 0;
-  int end;
-  for (start=0;*(buf+start)==' ';start++);
-  for (end=start;*(buf+end)!=' ';end++);
+  //write(stdout,buf,strlen(buf));
+  char* tok = strtok(buf,"\t ");
 
-  size_t read_reqs = strtol(buf+start,buf+end-1,10);
+  write(stdout,tok,strlen(tok));
+  size_t read_reqs = strtol(tok,tok + strlen(tok),10);
   
   for (int i = 0; i<65535; i++) {
     buf[i] = 0;
