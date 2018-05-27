@@ -16,5 +16,7 @@ int main() {
   assert(*strtok(0x00, " ") == 'b');
   assert(*strtok(0x00, ", ") == 'c');
 
+  assert(atol("1") == 1);
+
   write(stdout,"All tests passed.\n",18);
 }

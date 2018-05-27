@@ -11,7 +11,7 @@ int main() {
   char* tok = strtok(buf,"\t ");
 
   write(stdout,tok,strlen(tok));
-  size_t read_reqs = strtol(tok,tok + strlen(tok)-1,10);
+  size_t read_reqs = atol(tok);
   
   for (int i = 0; i<65535; i++) {
     buf[i] = 0;

@@ -76,18 +76,18 @@ char* strtok(char* str, const char* delim) {
   return start;
 }
 
-long int strtol(const char *nptr, const char* endptr, int base) {
+long int atol(const char *str) {
   // https://codereview.stackexchange.com/a/45769
   long int value = 0;
   int sign = 1;
-  if( *nptr == '+' || *nptr == '-' ) {
-    if( *nptr  == '-' ) sign = -1;
-    nptr++;
+  if( *str == '+' || *str == '-' ) {
+    if( *str  == '-' ) sign = -1;
+    str++;
   }
-  while (nptr <= endptr) {
-    value *= base;
-    value += (int) (*nptr-'0');
-    nptr++;
+  while (*str) {
+    value *= 10;
+    value += (int) (*str-'0');
+    str++;
   }
   return (value * sign);
 }
