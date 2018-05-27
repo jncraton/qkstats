@@ -86,9 +86,9 @@ long int atol(const char *str) {
     if( *str  == '-' ) sign = -1;
     str++;
   }
-  while (*str && *str>='0' && *str<='9') {
+  while (*str>='0' && *str<='9') {
     value *= 10;
-    value += (int) (*str-'0');
+    value += (long int)(*str-'0');
     str++;
   }
   return (value * sign);
