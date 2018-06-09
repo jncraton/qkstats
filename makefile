@@ -18,7 +18,7 @@ testulibc-passed: testulibc
 
 test: testulibc-passed qkstats
 	@cat qkstats | wc
-	./qkstats
+	time ./qkstats
 
 clean:
 	rm -f qkstats
