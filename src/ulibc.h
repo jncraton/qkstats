@@ -47,6 +47,16 @@ typedef struct timespec {
 #define nanosleep(rqtp,rmtp) syscall(35,rqtp,rmtp)
 #define sleep(s) timespec t = {.seconds=s};nanosleep(&t,0)
 
+// string.h
+
+void *memset(void* s, int c, size_t n) {
+  for (int i = 0; i < n; i++) {
+    ((char*)s)[i] = c;
+  }
+
+  return s;
+}
+
 // stdlib.h
 
 size_t strlen(const char* str) {
