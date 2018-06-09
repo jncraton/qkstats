@@ -16,9 +16,7 @@ int main() {
 
   char* tok = strtok(blockdev,"\t ");
   while (tok) {
-    for (int i = 0; i<255; i++) {
-      buf[i] = 0;
-    }
+    memset(buf,0,255);
     
     sprintf(buf, "%d: %d\n", field, (int)atol(tok));
     write(stdout, buf, strlen(buf));
