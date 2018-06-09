@@ -18,9 +18,13 @@ long nth_int(char* filename, int n) {
 }
 
 int main() {
+  long io_start = nth_int("/sys/block/sda/stat", 9);
+
   sleep(1);
+
+  long io_ticks = nth_int("/sys/block/sda/stat", 9) - io_start;
   
   char buf[16];
-  sprintf(buf, "I/O ticks: %d\n", (int)nth_int("/sys/block/sda/stat", 9));
+  sprintf(buf, "I/O ticks: %d\n", (int)io_ticks);
   write(stdout, buf, strlen(buf));
 }
