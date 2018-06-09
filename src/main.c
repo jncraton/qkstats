@@ -9,6 +9,8 @@ int main() {
 
   write(stdout,blockdev,strlen(blockdev));
 
+  timespec one_second = {.seconds = 1};
+  nanosleep(&one_second,0);
 
   char buf[255];  
   int field = 0;

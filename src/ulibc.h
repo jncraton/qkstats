@@ -35,7 +35,14 @@ typedef ssize_t FILE;
 #define write(fd,buf,len) syscall(1,fd,buf,len)
 #define open(filename,flags) (FILE*)syscall(2,filename,flags)
 #define close(fd) syscall(3,fd)
+#define nanosleep(rqtp,rmtp) syscall(35,rqtp,rmtp)
 #define exit(error_code) syscall(60,error_code)
+
+typedef struct timespec {
+  /* Used for arguments to nanosleep */
+  long long seconds;
+  long nanoseconds;
+} timespec;
 
 // stdlib.h
 
