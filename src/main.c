@@ -31,9 +31,11 @@ int main() {
   sleep(1);
 
   long io_ticks = nth_int("/sys/block/sda/stat", 9) - io_start;
+
+  int circle = min(((io_ticks + 332) / 333), 4);
   
   char buf[64];
-  sprintf(buf, "I/O ticks: %s %d\n", circles[0], (int)io_ticks);
+  sprintf(buf, "I/O ticks: %s %d\n", circles[circle], (int)io_ticks);
   write(stdout, buf, strlen(buf));
 
   return 0;
