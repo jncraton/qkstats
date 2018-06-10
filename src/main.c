@@ -65,7 +65,7 @@ int main() {
   long cpu_idle_end[9];
   int n_cpus = get_cpu_stats(cpu_idle_end);
 
-  char cpus[128]; // Needs to allocate at least 3n+1 where n is CPU count
+  char cpus[1024]; // Needs to allocate at least 3n+1 where n is CPU count
   int pos = 0;
 
   for (int i = 1; i <= n_cpus; i++) {
