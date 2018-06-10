@@ -177,6 +177,12 @@ int sprintf(char * str, const char* format, ...) {
           }
         }
         if (in_leading_zeroes) { *str = '0'; str++; }
+      } else if (*format == 's') {
+        char* sub = (char*)va_arg(vl,size_t);
+        while(*sub) {
+          *str = *sub;
+          sub++; str++;
+        }
       }
       format++;      
     } else {
