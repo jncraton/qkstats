@@ -4,6 +4,7 @@ long nth_int(char* filename, int n) {
   char content[255];
 
   FILE* fp = open(filename, O_RDONLY);
+  if (fp == -1) { return -1 };
   read(fp, content, 255);
   close(fp);
 
@@ -36,9 +37,7 @@ int get_cpu_stats(long* idle) {
   while (tok) {
     if (tok[0] == 'c' && tok[1] == 'p' && tok[2] == 'u') {
       cpu++;
-      strtok(0,"\n\t ");
-      strtok(0,"\n\t ");
-      strtok(0,"\n\t ");
+      for (int i = 0; i < 3; i++) { strtok(0,"\n\t "); }
       idle[cpu] = atol(strtok(0,"\n\t "));
     }
     tok = strtok(0,"\n\t ");
@@ -51,12 +50,11 @@ const char circles[][4] = {"○","◔","◑","◕","●"};
 const char squares_growing[][8] = {"·","▪","■"};
 const char squares_filling[][4] = {"□","⬓","■"};
 const char bars_vert[][4] = {" ","▁","▂","▃","▄","▅","▆","▇","█"};
-const char bars_horiz[][4] = {" ","▏","▎","▍","▌","▋","▊","▉","█"};
 
 int main() {
-  long io_start = nth_int("/sys/block/sda/stat", 9);
   int bat = nth_int("/sys/class/power_supply/BAT0/capacity",0);
-  
+  long io_start = nth_int("/sys/block/sda/stat", 9);
+
   long cpu_idle_start[9];
   get_cpu_stats(cpu_idle_start);
 
@@ -84,13 +82,12 @@ int main() {
       if (!state[j]) { break; }
       cpus[pos] = state[j]; pos++;
     }
-    cpus[pos] = ' '; pos++;
   }
 
   int io_status = min(((io_ticks + 332) / 333), 4);
   
   char buf[64];
-  sprintf(buf, "I/O ticks: %s %s %d%% \n", cpus, circles[io_status], (int)bat);
+  sprintf(buf, "%s %s %d%% \n", cpus, circles[io_status], (int)bat);
   write(stdout, buf, strlen(buf));
 
   return 0;
