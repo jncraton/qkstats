@@ -48,13 +48,14 @@ int get_cpu_stats(long* idle) {
 }
 
 const char circles[][4] = {"○","◔","◑","◕","●"};
-const char squares_growing[][4] = {"·","▪","■"};
+const char squares_growing[][8] = {"·","▪","■"};
 const char squares_filling[][4] = {"□","⬓","■"};
 const char bars_vert[][4] = {" ","▁","▂","▃","▄","▅","▆","▇","█"};
 const char bars_horiz[][4] = {" ","▏","▎","▍","▌","▋","▊","▉","█"};
 
 int main() {
   long io_start = nth_int("/sys/block/sda/stat", 9);
+  int bat = nth_int("/sys/class/power_supply/BAT0/capacity",0);
   
   long cpu_idle_start[9];
   get_cpu_stats(cpu_idle_start);
@@ -86,10 +87,10 @@ int main() {
     cpus[pos] = ' '; pos++;
   }
 
-  int circle = min(((io_ticks + 332) / 333), 4);
+  int io_status = min(((io_ticks + 332) / 333), 4);
   
   char buf[64];
-  sprintf(buf, "I/O ticks: %s %d %s\n", circles[circle], (int)io_ticks, cpus);
+  sprintf(buf, "I/O ticks: %s %s %d%% \n", cpus, circles[io_status], (int)bat);
   write(stdout, buf, strlen(buf));
 
   return 0;
