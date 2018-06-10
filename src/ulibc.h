@@ -195,6 +195,10 @@ int sprintf(char * str, const char* format, ...) {
 
 #define assert(expr) if (!(expr)) { write(stderr,"ASSERTION FAILED: " #expr "\n",strlen(#expr) + 19); exit(1); }
 
+// misc
+#define min(a,b) ((a < b) ? a : b)
+#define max(a,b) ((a > b) ? a : b)
+
 // Bootstrap our main function
 int main();
 void _start() {
