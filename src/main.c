@@ -4,7 +4,7 @@ long nth_int(char* filename, int n) {
   char content[255];
 
   FILE* fp = open(filename, O_RDONLY);
-  if (fp == -1) { return -1 };
+  if (fp == (FILE*)-1) { return -1; }
   read(fp, content, 255);
   close(fp);
 
@@ -87,7 +87,7 @@ int main() {
   int io_status = min(((io_ticks + 332) / 333), 4);
   
   char buf[64];
-  sprintf(buf, "%s %s %d%% \n", cpus, circles[io_status], (int)bat);
+  sprintf(buf, "%s %s %d%%", cpus, circles[io_status], (int)bat);
   write(stdout, buf, strlen(buf));
 
   return 0;
