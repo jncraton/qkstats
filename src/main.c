@@ -17,6 +17,36 @@ long nth_int(char* filename, int n) {
   return -1;
 }
 
+int get_cpu_stats(long* idle) {
+  /** Gets CPU total idle time
+
+  Returns CPU count
+  
+  This will cause an overflow if `idle` doesn't have enough memory 
+  allocated for all cpus.
+  **/
+  char buf[4096];
+
+  FILE* fp = open("/proc/stat", O_RDONLY);
+  read(fp, buf, 4096);
+  close(fp);
+
+  char* tok = strtok(buf,"\n\t ");
+  int cpu = -1;
+  while (tok) {
+    if (tok[0] == 'c' && tok[1] == 'p' && tok[2] == 'u') {
+      cpu++;
+      strtok(0,"\n\t ");
+      strtok(0,"\n\t ");
+      strtok(0,"\n\t ");
+      idle[cpu] = atol(strtok(0,"\n\t "));
+    }
+    tok = strtok(0,"\n\t ");
+  }
+
+  return cpu;
+}
+
 const char circles[][4] = {"○","◔","◑","◕","●"};
 const char squares_growing[][4] = {"·","▪","■"};
 const char squares_filling[][4] = {"□","⬓","■"};
@@ -25,15 +55,41 @@ const char bars_horiz[][4] = {" ","▏","▎","▍","▌","▋","▊","▉","█
 
 int main() {
   long io_start = nth_int("/sys/block/sda/stat", 9);
+  
+  long cpu_idle_start[9];
+  get_cpu_stats(cpu_idle_start);
 
   sleep(1);
 
   long io_ticks = nth_int("/sys/block/sda/stat", 9) - io_start;
 
+  long cpu_idle_end[9];
+  int n_cpus = get_cpu_stats(cpu_idle_end);
+
+  char cpus[128]; // Needs to allocate at least 3n+1 where n is CPU count
+  int pos = 0;
+
+  for (int i = 1; i <= n_cpus; i++) {
+    int idle = cpu_idle_end[i] - cpu_idle_start[i];
+
+    const char* state = squares_growing[0];
+    if (idle < 10) {
+      state = squares_growing[2];
+    } else if (idle < 97) {
+      state = squares_growing[1];
+    }
+
+    for (int j = 0; j < 4; j++) {
+      if (!state[j]) { break; }
+      cpus[pos] = state[j]; pos++;
+    }
+    cpus[pos] = ' '; pos++;
+  }
+
   int circle = min(((io_ticks + 332) / 333), 4);
   
   char buf[64];
-  sprintf(buf, "I/O ticks: %s %d\n", circles[circle], (int)io_ticks);
+  sprintf(buf, "I/O ticks: %s %d %s\n", circles[circle], (int)io_ticks, cpus);
   write(stdout, buf, strlen(buf));
 
   return 0;
