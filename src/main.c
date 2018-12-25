@@ -85,9 +85,13 @@ int main() {
   }
 
   int io_status = min(((io_ticks + 332) / 333), 4);
-  
+
+  char ac[5] = "⚡";
+
+  if (nth_int("/sys/class/power_supply/AC/online" ,0) == 0) { ac[0] = 0x00; }
+
   char buf[64];
-  sprintf(buf, "%s %s %d%%", cpus, circles[io_status], (int)bat);
+  sprintf(buf, "%s %s %s%d%%", cpus, circles[io_status], ac, (int)bat);
   write(stdout, buf, strlen(buf));
 
   return 0;
