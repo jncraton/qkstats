@@ -36,7 +36,7 @@ int get_cpu_stats(long* idle) {
   int cpu = -1;
   while (tok) {
     if (tok[0] == 'c' && tok[1] == 'p' && tok[2] == 'u') {
-      cpu++;
+      cpu += 2;
       for (int i = 0; i < 3; i++) { strtok(0,"\n\t "); }
       idle[cpu] = atol(strtok(0,"\n\t "));
     }
@@ -55,14 +55,14 @@ int main() {
   int bat = nth_int("/sys/class/power_supply/BAT0/capacity",0);
   long io_start = nth_int("/sys/block/sda/stat", 9);
 
-  long cpu_idle_start[9];
+  long cpu_idle_start[32];
   get_cpu_stats(cpu_idle_start);
 
   sleep(1);
 
   long io_ticks = nth_int("/sys/block/sda/stat", 9) - io_start;
 
-  long cpu_idle_end[9];
+  long cpu_idle_end[32];
   int n_cpus = get_cpu_stats(cpu_idle_end);
 
   char cpus[1024]; // Needs to allocate at least 3n+1 where n is CPU count
