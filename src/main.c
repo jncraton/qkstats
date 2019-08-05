@@ -36,7 +36,7 @@ int get_cpu_stats(long* idle) {
   int cpu = -1;
   while (tok) {
     if (tok[0] == 'c' && tok[1] == 'p' && tok[2] == 'u') {
-      cpu += 2;
+      cpu += 1;
       for (int i = 0; i < 3; i++) { strtok(0,"\n\t "); }
       idle[cpu] = atol(strtok(0,"\n\t "));
     }
